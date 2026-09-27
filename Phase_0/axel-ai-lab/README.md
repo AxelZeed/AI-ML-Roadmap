@@ -1,0 +1,574 @@
+# Axel AI Lab
+
+Axel AI Lab is a reusable experiment workbench built while learning Python and software engineering fundamentals.
+
+The project started as a simple Python exercise runner and evolved through Phase 0 into a structured experiment system with configuration files, validation, logging, CLI arguments, environment variables, persistent results, testing, type checking, profiling concepts, experiment tracking, and run-specific artifacts.
+
+Version: **0.1.0**
+
+## Purpose
+
+The current workload is a deterministic numerical benchmark rather than a machine learning model.
+
+Its purpose is to validate the experiment infrastructure before the same architecture is reused for future machine learning, deep learning, NLP, and reinforcement learning experiments.
+
+The core pipeline is:
+
+```text
+CLI
+↓
+configuration
+↓
+Experiment objects
+↓
+validation
+↓
+experiment execution
+↓
+ExperimentResult
+↓
+comparison/reporting
+├── latest JSON results
+├── CSV history
+├── individual run artifacts
+└── application logs
+```
+
+Future AI/ML phases can replace the benchmark workload with model training while retaining much of the surrounding infrastructure.
+
+## Features
+
+- YAML experiment configuration
+- JSON configuration support
+- CLI arguments
+- Environment-variable configuration
+- `.env` support
+- Structured logging
+- Dataclass-based experiment models
+- Runtime validation
+- Generator-based experiment filtering
+- Experiment parameter sweeps
+- Deterministic benchmark execution
+- Runtime measurement
+- Unique run IDs
+- Start and finish timestamps
+- Latest-result JSON storage
+- Persistent CSV experiment history
+- Individual run directories
+- Experiment comparison
+- Automatic directory creation
+- Cross-platform path handling
+- Unit tests with pytest
+- Static type checking with mypy
+- Linux and Windows setup scripts
+
+## Project Structure
+
+```text
+axel-ai-lab/
+├── configs/
+│   └── experiments.yaml
+│
+├── datasets/
+│   └── .gitkeep
+│
+├── experiments/
+│   ├── .gitkeep
+│   ├── results.json
+│   ├── history.csv
+│   └── runs/
+│       └── <run_id>/
+│           └── result.json
+│
+├── logs/
+│   └── .gitkeep
+│
+├── models/
+│   └── .gitkeep
+│
+├── plots/
+│   └── .gitkeep
+│
+├── scripts/
+│   ├── setup_linux.sh
+│   ├── setup_windows.ps1
+│   └── verify.py
+│
+├── src/
+│   ├── __init__.py
+│   ├── cli.py
+│   ├── comparison.py
+│   ├── config.py
+│   ├── environment.py
+│   ├── experiment.py
+│   ├── generators.py
+│   ├── history.py
+│   ├── logger.py
+│   ├── models.py
+│   ├── paths.py
+│   ├── reporting.py
+│   ├── run_id.py
+│   ├── search.py
+│   ├── storage.py
+│   ├── sweep.py
+│   └── validation.py
+│
+├── tests/
+│
+├── tools/
+│   ├── algorithms.py
+│   ├── api.py
+│   └── profiling.py
+│
+├── .env.example
+├── .gitignore
+├── main.py
+├── pyproject.toml
+└── README.md
+```
+
+Generated experiment data, logs, models, datasets, plots, local environments, and secrets are excluded from Git.
+
+## Requirements
+
+- Python 3.13 or newer
+- Git recommended
+- Linux or Windows
+
+## Quick Setup — Linux
+
+Clone or copy the repository and enter it:
+
+```bash
+git clone <repository-url>
+cd axel-ai-lab
+```
+
+Run:
+
+```bash
+./scripts/setup_linux.sh
+```
+
+Activate the virtual environment:
+
+```bash
+source .venv/bin/activate
+```
+
+Run the Workbench:
+
+```bash
+axel-ai-lab --verbose
+```
+
+Alternatively:
+
+```bash
+python main.py --verbose
+```
+
+## Quick Setup — Windows PowerShell
+
+Clone or copy the repository and enter it:
+
+```powershell
+git clone <repository-url>
+cd axel-ai-lab
+```
+
+Run:
+
+```powershell
+.\scripts\setup_windows.ps1
+```
+
+Activate the environment:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+Run:
+
+```powershell
+axel-ai-lab --verbose
+```
+
+Alternatively:
+
+```powershell
+python main.py --verbose
+```
+
+If PowerShell prevents local scripts from running, the current session can temporarily allow them with:
+
+```powershell
+Set-ExecutionPolicy -Scope Process Bypass
+```
+
+## Manual Setup
+
+If the setup scripts are not used, create a virtual environment manually.
+
+Linux:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+Windows:
+
+```powershell
+py -3.13 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+Upgrade pip:
+
+```bash
+python -m pip install --upgrade pip
+```
+
+Install the complete development environment:
+
+```bash
+python -m pip install -e ".[dev,tools]"
+```
+
+Create the local environment file.
+
+Linux:
+
+```bash
+cp .env.example .env
+```
+
+Windows:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+Then run:
+
+```bash
+axel-ai-lab --verbose
+```
+
+## Installation Options
+
+Runtime dependencies only:
+
+```bash
+python -m pip install -e .
+```
+
+Runtime plus development tools:
+
+```bash
+python -m pip install -e ".[dev]"
+```
+
+Complete repository environment:
+
+```bash
+python -m pip install -e ".[dev,tools]"
+```
+
+The complete environment includes pytest, mypy, and packages used by utilities inside `tools/`.
+
+## Running Experiments
+
+Default execution:
+
+```bash
+axel-ai-lab
+```
+
+Verbose execution:
+
+```bash
+axel-ai-lab --verbose
+```
+
+Help:
+
+```bash
+axel-ai-lab --help
+```
+
+Custom configuration:
+
+```bash
+axel-ai-lab --config configs/experiments.yaml
+```
+
+Custom output:
+
+```bash
+axel-ai-lab --output experiments/custom_results.json
+```
+
+## Experiment Configuration
+
+The default configuration is:
+
+```text
+configs/experiments.yaml
+```
+
+Example:
+
+```yaml
+experiments:
+  - name: small_benchmark
+    sample_count: 10000
+    iterations: 5
+    enabled: true
+
+  - name: medium_benchmark
+    sample_count: 50000
+    iterations: 10
+    enabled: true
+
+  - name: disabled_benchmark
+    sample_count: 100000
+    iterations: 20
+    enabled: false
+```
+
+Invalid or disabled experiments are skipped before execution.
+
+## Environment Variables
+
+Local variables can be stored in:
+
+```text
+.env
+```
+
+Example:
+
+```text
+AXEL_AI_LAB_MODE=development
+AXEL_AI_LAB_API_KEY=
+```
+
+The `.env` file is intentionally excluded from Git.
+
+The repository contains:
+
+```text
+.env.example
+```
+
+as a safe template.
+
+Never commit real API keys or credentials.
+
+## Results
+
+The latest completed experiment set is written to:
+
+```text
+experiments/results.json
+```
+
+Historical experiment records are appended to:
+
+```text
+experiments/history.csv
+```
+
+Each execution also receives a unique run directory:
+
+```text
+experiments/runs/<run_id>/
+```
+
+containing:
+
+```text
+result.json
+```
+
+A run ID looks similar to:
+
+```text
+run_20260915_101530_a3f72c
+```
+
+Future ML phases can store additional artifacts in the same directory, such as:
+
+```text
+model.pt
+model.zip
+config.json
+evaluation.json
+training_curve.png
+confusion_matrix.png
+```
+
+## Testing
+
+Run all tests:
+
+```bash
+pytest -v
+```
+
+Run a specific file:
+
+```bash
+pytest tests/test_storage.py -v
+```
+
+Stop on the first failure:
+
+```bash
+pytest -x
+```
+
+## Static Type Checking
+
+Run:
+
+```bash
+mypy
+```
+
+The configured type-checking scope includes:
+
+```text
+main.py
+src/
+tests/
+```
+
+## Complete Verification
+
+Run:
+
+```bash
+python scripts/verify.py
+```
+
+This executes:
+
+```text
+pytest
+↓
+mypy
+↓
+real Workbench execution
+```
+
+The verification is successful only when all three stages complete successfully.
+
+## Development Workflow
+
+A typical development cycle is:
+
+```text
+activate virtual environment
+↓
+edit code
+↓
+pytest
+↓
+mypy
+↓
+run Workbench
+↓
+git diff
+↓
+git add
+↓
+git commit
+```
+
+Useful Git commands:
+
+```bash
+git status
+git diff
+git log --oneline
+```
+
+## Phase 0 Concepts Covered
+
+This project was built while learning:
+
+- Python syntax and basic control flow
+- Functions
+- Modules and packages
+- Lists, dictionaries, tuples, and sets
+- Comprehensions
+- Files
+- JSON
+- CSV
+- YAML
+- Exceptions
+- Logging
+- Classes
+- Dataclasses
+- Type hints
+- Iterators and generators
+- Virtual environments
+- pip
+- `pyproject.toml`
+- CLI arguments
+- Environment variables
+- Git and GitHub fundamentals
+- pytest
+- HTTP and REST API fundamentals
+- Debugging
+- Profiling
+- Algorithms
+- Data structures
+- Big O intuition
+- Experiment architecture
+
+## Future Direction
+
+The numerical benchmark is temporary.
+
+Future versions can evolve `Experiment`, `ExperimentResult`, and `run_experiment()` to support real AI experiments such as:
+
+```text
+dataset loading
+↓
+preprocessing
+↓
+model construction
+↓
+training
+↓
+evaluation
+↓
+metric collection
+↓
+model storage
+↓
+plot generation
+```
+
+Possible future experiment types include:
+
+- Classical machine learning
+- NLP
+- Deep learning
+- Reinforcement learning
+- Hyperparameter sweeps
+- Model comparison
+- Automated evaluation
+
+The infrastructure around those experiments — configuration, CLI, logging, tests, result tracking, run IDs, history, and artifact directories — is designed to evolve rather than be rebuilt from scratch.
+
+## Status
+
+**Phase 0 — Complete**
+
+**Axel AI Lab v0.1.0**

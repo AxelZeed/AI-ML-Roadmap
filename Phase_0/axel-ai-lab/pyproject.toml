@@ -1,0 +1,68 @@
+[build-system]
+requires = [
+    "setuptools>=77",
+    "wheel",
+]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "axel-ai-lab"
+version = "0.1.0"
+description = "A reusable experiment workbench for learning Python, software engineering, and future AI/ML experimentation."
+readme = "README.md"
+requires-python = ">=3.13"
+
+dependencies = [
+    "PyYAML>=6.0",
+    "python-dotenv>=1.0",
+]
+
+
+[project.optional-dependencies]
+dev = [
+    "mypy>=1.0",
+    "pytest>=8.0",
+    "types-PyYAML>=6.0",
+]
+
+tools = [
+    "requests>=2.32",
+]
+
+
+[project.scripts]
+axel-ai-lab = "main:main"
+
+
+[tool.setuptools]
+packages = [
+    "src",
+]
+py-modules = [
+    "main",
+]
+
+
+[tool.mypy]
+python_version = "3.13"
+check_untyped_defs = true
+files = [
+    "main.py",
+    "src",
+    "tests",
+]
+
+[[tool.mypy.overrides]]
+module = "yaml.*"
+ignore_missing_imports = true
+
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests",
+]
+
+python_files = [
+    "test_*.py",
+]

@@ -1,0 +1,15 @@
+experiments:
+  - name: small_benchmark
+    sample_count: 10000
+    iterations: 5
+    enabled: true
+
+  - name: medium_benchmark
+    sample_count: 50000
+    iterations: 10
+    enabled: true
+
+  - name: disabled_benchmark
+    sample_count: 100000
+    iterations: 20
+    enabled: false

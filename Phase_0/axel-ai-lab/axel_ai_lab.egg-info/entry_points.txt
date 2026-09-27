@@ -1,0 +1,2 @@
+[console_scripts]
+axel-ai-lab = main:main

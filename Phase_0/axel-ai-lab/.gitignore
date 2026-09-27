@@ -1,0 +1,43 @@
+# Virtual environment
+.venv/
+
+# Local environment secrets
+.env
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Type checker cache
+.mypy_cache/
+
+# Pytest cache
+.pytest_cache/
+
+# IDE/editor files
+.vscode/
+.idea/
+
+# Generated logs
+logs/*
+!logs/.gitkeep
+
+# Generated experiment outputs
+experiments/*
+!experiments/.gitkeep
+
+# Generated datasets
+datasets/*
+!datasets/.gitkeep
+
+# Generated models
+models/*
+!models/.gitkeep
+
+# Generated plots
+plots/*
+!plots/.gitkeep
+
+# OS junk
+.DS_Store
+Thumbs.db
